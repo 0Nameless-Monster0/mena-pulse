@@ -21,7 +21,8 @@ UA_POOL = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
 ]
 CHALLENGE_MARKERS = ("cf-challenge", "just a moment", "attention required", "__cf_chl")
-PROXY_URL = os.getenv("PROXY_URL") or None  # empty env var must mean "no proxy"
+PROXY_URL = os.getenv("PROXY_URL") or None  # empty env var (e.g. unset CI secret) must mean "no proxy"
+
 
 class BaseScraper(ABC):
     def __init__(self, cfg: dict):
@@ -44,8 +45,8 @@ class BaseScraper(ABC):
                     body = r.text
                     if r.status_code < 400 and not self._is_challenge(body):
                         return body
-            except Exception:
-                pass  # any transport/config error -> escalate to browser
+            except Exception:  # any transport/config error -> escalate to browser
+                pass
         return await self._fetch_browser(url)
 
     @staticmethod
@@ -67,7 +68,13 @@ class BaseScraper(ABC):
                 viewport={"width": 1440, "height": 900},
             )
             page = await ctx.new_page()
-            await page.goto(url, wait_until="networkidle", timeout=45_000)
+            # "networkidle" never fires on ad/analytics-heavy exchange sites and
+            # causes hard timeouts; load the DOM, then give scripts a moment.
+            try:
+                await page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+            except Exception:
+                pass  # grab whatever rendered anyway
+            await asyncio.sleep(4)
             # Let CF's JS challenge settle if present.
             for _ in range(10):
                 html = await page.content()
