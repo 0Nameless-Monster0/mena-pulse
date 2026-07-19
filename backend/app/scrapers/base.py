@@ -21,8 +21,7 @@ UA_POOL = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
 ]
 CHALLENGE_MARKERS = ("cf-challenge", "just a moment", "attention required", "__cf_chl")
-PROXY_URL = os.getenv("PROXY_URL")  # e.g. residential proxy for hard-blocked exchanges
-
+PROXY_URL = os.getenv("PROXY_URL") or None  # empty env var must mean "no proxy"
 
 class BaseScraper(ABC):
     def __init__(self, cfg: dict):
@@ -45,8 +44,8 @@ class BaseScraper(ABC):
                     body = r.text
                     if r.status_code < 400 and not self._is_challenge(body):
                         return body
-            except httpx.HTTPError:
-                pass  # escalate
+            except Exception:
+                pass  # any transport/config error -> escalate to browser
         return await self._fetch_browser(url)
 
     @staticmethod
