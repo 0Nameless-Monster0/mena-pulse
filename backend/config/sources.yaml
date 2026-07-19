@@ -65,3 +65,43 @@ sources:
     market: AE
     strategy: rss
     url: https://www.zawya.com/en/rss/uae
+  # ── GUARANTEED WIRES (Google News RSS — robot-friendly, always reachable) ──
+  - key: wire_eg
+    name: EG Wire
+    market: EG
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22EGX%22%20OR%20%22Egyptian%20Exchange%22%20OR%20%22Egypt%20stocks%22%20OR%20%22Commercial%20International%20Bank%22&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_sa
+    name: SA Wire
+    market: SA
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22Tadawul%22%20OR%20%22Saudi%20Exchange%22%20OR%20%22TASI%22%20OR%20%22Saudi%20stocks%22&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_ae
+    name: UAE Wire
+    market: AE
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22UAE%20stocks%22%20OR%20%22Gulf%20markets%22%20UAE%20OR%20%22CBUAE%22&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_adx
+    name: ADX
+    market: AE
+    exchange: ADX
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22Abu%20Dhabi%20Securities%20Exchange%22%20OR%20%22ADX%22%20%22Abu%20Dhabi%22&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_dfm
+    name: DFM
+    market: AE
+    exchange: DFM
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22Dubai%20Financial%20Market%22%20OR%20%22DFM%22%20Dubai&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_egx
+    name: EGX
+    market: EG
+    exchange: EGX
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22Egyptian%20Exchange%22%20disclosure%20OR%20%22EGX%22%20earnings&hl=en-US&gl=US&ceid=US:en"
+  - key: wire_tasi
+    name: Tadawul
+    market: SA
+    exchange: TASI
+    strategy: rss
+    url: "https://news.google.com/rss/search?q=%22Tadawul%22%20announcement%20OR%20%22Saudi%20Exchange%22%20disclosure&hl=en-US&gl=US&ceid=US:en"
