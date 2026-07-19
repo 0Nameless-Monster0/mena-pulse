@@ -5,6 +5,7 @@ the static frontend fetches it — no server required.
 """
 import asyncio
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -12,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app import storage                      # noqa: E402
 from app.pipeline.ingest import run_cycle    # noqa: E402
 
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("news.json")
 
 
