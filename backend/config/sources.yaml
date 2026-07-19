@@ -1,0 +1,67 @@
+# All 9 required source directories. `strategy` selects the scraper module.
+# rss_url entries are the resilient fallback when HTML scraping is blocked.
+sources:
+  # ── EGYPT ────────────────────────────────────────────────────────────
+  - key: egx
+    name: EGX
+    market: EG
+    exchange: EGX
+    strategy: egx
+    url: https://www.egx.com.eg/en/newssearch.aspx
+  - key: enterprise
+    name: Enterprise
+    market: EG
+    strategy: rss
+    url: https://enterprise.news/egypt/en/feed/
+  - key: mubasher_eg
+    name: Mubasher EG
+    market: EG
+    strategy: mubasher
+    url: https://www.mubasher.info/api/1/listed-companies-news?country=eg&size=40
+  - key: almal
+    name: Al Mal
+    market: EG
+    strategy: rss
+    url: https://almalnews.com/feed/
+  - key: arabfinance
+    name: Arab Finance
+    market: EG
+    strategy: rss
+    url: https://www.arabfinance.com/en/rss/news
+  # ── SAUDI ARABIA ─────────────────────────────────────────────────────
+  - key: tadawul
+    name: Tadawul
+    market: SA
+    exchange: TASI
+    strategy: tadawul
+    url: https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en
+  - key: mubasher_sa
+    name: Mubasher SA
+    market: SA
+    strategy: mubasher
+    url: https://www.mubasher.info/api/1/listed-companies-news?country=sa&size=40
+  - key: zawya_sa
+    name: Zawya
+    market: SA
+    strategy: rss
+    url: https://www.zawya.com/en/rss/saudi-arabia
+  # ── UAE ──────────────────────────────────────────────────────────────
+  - key: adx
+    name: ADX
+    market: AE
+    exchange: ADX
+    strategy: adx
+    url: https://www.adx.ae/
+    api: https://www.adx.ae/api/News/GetDisclosures?pageNumber=1&pageSize=40
+  - key: dfm
+    name: DFM
+    market: AE
+    exchange: DFM
+    strategy: dfm
+    url: https://marketwatch.dfm.ae/
+    api: https://marketwatch.dfm.ae/api/v1/disclosures?limit=40
+  - key: zawya_ae
+    name: Zawya
+    market: AE
+    strategy: rss
+    url: https://www.zawya.com/en/rss/uae

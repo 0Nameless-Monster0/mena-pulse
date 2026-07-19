@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MENA Pulse — Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   MENA PULSE · terminal skin
+   Obsidian glassmorphism · neon-restrained accents · tabular data type
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  --bg0:#04060d;
+  --glass:linear-gradient(180deg,rgba(17,24,39,.52),rgba(9,13,25,.42));
+  --glass-hi:linear-gradient(180deg,rgba(24,28,44,.66),rgba(12,16,30,.5));
+  --stroke:rgba(148,163,184,.11);
+  --stroke-hover:rgba(170,186,214,.28);
+  --txt:#e9eef7; --dim:#9aa7bd; --dimmer:#5f6d87; --faint:#414e66;
+  --amber:#fbbf24; --amber-deep:#f59e0b;
+  --bull:#34d399; --bear:#fb4d67;
+  --font:Inter,system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html{scrollbar-color:#2a3650 transparent}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#243046;border-radius:99px}
+::selection{background:rgba(251,191,36,.25);color:#fff}
+body{
+  color:var(--txt);font:14px/1.45 var(--font);
+  letter-spacing:-0.011em;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1100px 700px at 82% -12%, rgba(56,89,220,.16), transparent 62%),
+    radial-gradient(850px 550px at -8% 108%, rgba(245,158,11,.06), transparent 58%),
+    radial-gradient(700px 500px at 50% 120%, rgba(99,102,241,.07), transparent 60%),
+    var(--bg0);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+.mono,[class*="src"],.when,.tick,.l2,.n,.upd,.abtn{font-family:var(--mono);font-feature-settings:"tnum" 1}
+
+/* ── header: frosted command bar ────────────────────────────────── */
+header{position:sticky;top:0;z-index:20;background:rgba(4,7,15,.62);
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%)}
+header::after{content:"";display:block;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(251,191,36,.35) 18%,rgba(148,163,184,.18) 50%,rgba(99,102,241,.3) 82%,transparent)}
+.bar{max-width:1152px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 26px;padding:12px 20px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-weight:700;font-size:13.5px;letter-spacing:.22em}
+.logo .a{color:var(--amber);text-shadow:0 0 14px rgba(251,191,36,.55)}
+.logo svg{color:var(--amber);filter:drop-shadow(0 0 6px rgba(251,191,36,.6))}
+.pill{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.14em;padding:3px 8px;border-radius:99px;
+  background:rgba(100,116,139,.16);color:var(--dim);border:1px solid rgba(148,163,184,.18)}
+nav{display:flex;gap:2px;padding:3px;border-radius:12px;background:rgba(10,14,26,.6);border:1px solid var(--stroke)}
+nav button{border:0;background:none;color:var(--dim);font:600 13px var(--font);letter-spacing:-0.01em;
+  padding:7px 15px;border-radius:9px;cursor:pointer;transition:all .18s ease}
+nav button:hover{color:var(--txt);background:rgba(148,163,184,.08)}
+nav button.on{color:#0b0e18;background:linear-gradient(180deg,#fde68a,#f59e0b);
+  box-shadow:0 2px 14px -2px rgba(245,158,11,.55),inset 0 1px 0 rgba(255,255,255,.5)}
+.upd{margin-left:auto;display:flex;align-items:center;gap:8px;font:500 10px var(--mono);letter-spacing:.04em;color:var(--dimmer)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--bull);
+  box-shadow:0 0 8px rgba(52,211,153,.9),0 0 18px rgba(52,211,153,.4);animation:pu 2.2s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+
+.wrap{max-width:1152px;margin:0 auto;padding:20px}
+
+/* ── horizon selector: glass segments with live counts ──────────── */
+.hbar{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin-bottom:16px}
+.hbtn{position:relative;border:1px solid var(--stroke);background:var(--glass);border-radius:14px;
+  padding:10px 18px;cursor:pointer;text-align:left;color:var(--dim);min-width:158px;
+  backdrop-filter:blur(10px);transition:all .22s cubic-bezier(.4,0,.2,1)}
+.hbtn:hover{border-color:var(--stroke-hover);transform:translateY(-1px)}
+.hbtn .l1{font:700 12.5px var(--font);letter-spacing:.01em}
+.hbtn .l2{font:500 10px var(--mono);color:var(--dimmer);margin-top:3px;letter-spacing:.02em}
+.hbtn.on{color:var(--amber);border-color:rgba(251,191,36,.45);
+  background:linear-gradient(180deg,rgba(251,191,36,.12),rgba(245,158,11,.04));
+  box-shadow:0 0 28px -8px rgba(245,158,11,.45),inset 0 1px 0 rgba(251,191,36,.18)}
+.hbtn.on .l2{color:rgba(251,191,36,.75)}
+.hbar .upd{align-self:center}
+
+/* ── UAE sub-tabs ───────────────────────────────────────────────── */
+.subtabs{display:inline-flex;border:1px solid var(--stroke);background:var(--glass);backdrop-filter:blur(10px);
+  border-radius:12px;padding:3px;margin-bottom:16px}
+.subtabs button{border:0;background:none;color:var(--dim);font:600 12px var(--font);
+  padding:6px 16px;border-radius:9px;cursor:pointer;transition:all .18s ease}
+.subtabs button:hover{color:var(--txt)}
+.subtabs button.on{background:linear-gradient(180deg,rgba(148,163,184,.22),rgba(100,116,139,.14));color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 10px -2px rgba(0,0,0,.6)}
+
+/* ── sections ───────────────────────────────────────────────────── */
+.sec{margin-bottom:30px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sec-h h2{font:700 11px var(--mono);letter-spacing:.24em;text-transform:uppercase}
+.sec-h .n{font:600 10px var(--mono);padding:2px 8px;border-radius:99px}
+.sec-h .rule{height:1px;flex:1}
+.hi h2{color:var(--amber);text-shadow:0 0 16px rgba(251,191,36,.4)}
+.hi .n{color:var(--amber);background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25)}
+.hi .rule{background:linear-gradient(90deg,rgba(251,191,36,.5),rgba(251,191,36,.08) 55%,transparent)}
+.hi svg{filter:drop-shadow(0 0 5px rgba(245,158,11,.7))}
+.gen h2{color:var(--dimmer)}
+.gen .n{color:var(--dimmer);background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.2)}
+.gen .rule{background:linear-gradient(90deg,rgba(148,163,184,.22),transparent)}
+
+/* ── news cards: layered glass, sentiment edge, hover elevation ─── */
+.card{position:relative;display:flex;align-items:flex-start;gap:14px;
+  background:var(--glass);border:1px solid var(--stroke);border-radius:13px;
+  padding:11px 14px 11px 17px;margin-bottom:7px;backdrop-filter:blur(9px);
+  transition:transform .18s cubic-bezier(.4,0,.2,1),box-shadow .25s ease,border-color .2s ease}
+.card::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2.5px;border-radius:99px;
+  background:linear-gradient(180deg,rgba(148,163,184,.28),transparent);transition:all .25s ease}
+.card:hover{transform:translateY(-2px);border-color:var(--stroke-hover);
+  box-shadow:0 10px 32px -14px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.03) inset,0 0 22px -10px rgba(148,163,184,.28)}
+.card.hi-card{background:var(--glass-hi);border-color:rgba(251,191,36,.16)}
+.card.hi-card::before{background:linear-gradient(180deg,var(--amber),rgba(245,158,11,.05));
+  box-shadow:0 0 10px rgba(245,158,11,.5)}
+.card.hi-card:hover{border-color:rgba(251,191,36,.42);
+  box-shadow:0 10px 34px -14px rgba(0,0,0,.85),0 0 26px -8px rgba(245,158,11,.3)}
+.card.hi-card.s-bull::before{background:linear-gradient(180deg,var(--bull),rgba(52,211,153,.05));box-shadow:0 0 10px rgba(52,211,153,.55)}
+.card.hi-card.s-bull:hover{border-color:rgba(52,211,153,.4);box-shadow:0 10px 34px -14px rgba(0,0,0,.85),0 0 26px -8px rgba(52,211,153,.3)}
+.card.hi-card.s-bear::before{background:linear-gradient(180deg,var(--bear),rgba(251,77,103,.05));box-shadow:0 0 10px rgba(251,77,103,.55)}
+.card.hi-card.s-bear:hover{border-color:rgba(251,77,103,.4);box-shadow:0 10px 34px -14px rgba(0,0,0,.85),0 0 26px -8px rgba(251,77,103,.3)}
+
+.meta{display:flex;align-items:center;gap:9px;margin-bottom:5px;flex-wrap:wrap}
+.dir{font:700 9px var(--mono)}
+.dir.up{color:var(--bull);text-shadow:0 0 8px rgba(52,211,153,.8)}
+.dir.dn{color:var(--bear);text-shadow:0 0 8px rgba(251,77,103,.8)}
+.when{font:500 10px var(--mono);color:var(--dimmer);letter-spacing:.03em}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--bull);
+  box-shadow:0 0 8px rgba(52,211,153,.9);animation:pu 1.6s infinite}
+
+/* source badges: futuristic glass chips with signal dot */
+.src{position:relative;display:inline-flex;align-items:center;gap:5px;
+  font:700 9px var(--mono);letter-spacing:.13em;text-transform:uppercase;
+  padding:2.5px 9px;border-radius:7px;border:1px solid;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.src::before{content:"";width:4px;height:4px;border-radius:50%;background:currentColor;
+  box-shadow:0 0 6px currentColor}
+.t-EGX{color:#4cc3ff;background:linear-gradient(180deg,rgba(14,165,233,.2),rgba(14,165,233,.07));border-color:rgba(56,189,248,.38)}
+.t-Tadawul{color:#3ee6a8;background:linear-gradient(180deg,rgba(16,185,129,.2),rgba(16,185,129,.07));border-color:rgba(52,211,153,.38)}
+.t-ADX{color:#b49aff;background:linear-gradient(180deg,rgba(139,92,246,.22),rgba(139,92,246,.08));border-color:rgba(167,139,250,.4)}
+.t-DFM{color:#ff7d95;background:linear-gradient(180deg,rgba(244,63,94,.2),rgba(244,63,94,.07));border-color:rgba(251,113,133,.38)}
+.t-x{color:#a9b6cc;background:linear-gradient(180deg,rgba(100,116,139,.18),rgba(100,116,139,.06));border-color:rgba(148,163,184,.3)}
+
+/* ticker chips */
+.tick{font:700 10px var(--mono);letter-spacing:.06em;color:var(--amber);
+  background:linear-gradient(180deg,rgba(251,191,36,.14),rgba(245,158,11,.05));
+  border:1px solid rgba(251,191,36,.3);border-radius:6px;padding:1.5px 7px;
+  cursor:default;transition:all .18s ease}
+.tick:hover{transform:scale(1.06);box-shadow:0 0 14px rgba(251,191,36,.4);border-color:rgba(251,191,36,.6)}
+
+h3{font:480 13.5px/1.42 var(--font);letter-spacing:-0.008em;color:var(--txt)}
+h3 b{color:#fde68a;font-weight:700;text-shadow:0 0 12px rgba(251,191,36,.35)}
+
+/* actions */
+.acts{flex-shrink:0;display:flex;gap:7px;margin-top:2px}
+.abtn{display:flex;align-items:center;gap:5px;border:1px solid rgba(148,163,184,.22);
+  background:rgba(15,21,36,.5);border-radius:8px;padding:5px 10px;
+  font:600 10px var(--mono);letter-spacing:.03em;color:var(--dim);
+  text-decoration:none;cursor:pointer;opacity:.75;transition:all .2s ease}
+.card:hover .abtn{opacity:1}
+.abtn:hover{border-color:rgba(251,191,36,.55);color:var(--amber);
+  box-shadow:0 0 14px -4px rgba(245,158,11,.5);transform:translateY(-1px)}
+.abtn.ov-on{border-color:rgba(251,191,36,.6);color:var(--amber);opacity:1;
+  background:linear-gradient(180deg,rgba(251,191,36,.14),rgba(245,158,11,.05));
+  box-shadow:0 0 16px -4px rgba(245,158,11,.45)}
+
+/* analyst overview: buttery grid-rows slide */
+.ovwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s cubic-bezier(.33,1,.35,1)}
+.ovwrap.open{grid-template-rows:1fr}
+.ov{overflow:hidden;min-height:0;opacity:0;transform:translateY(-4px);
+  transition:opacity .3s ease .08s,transform .34s cubic-bezier(.33,1,.35,1) .05s}
+.ovwrap.open .ov{opacity:1;transform:none}
+.ov-inner{margin-top:9px;border-top:1px solid transparent;
+  border-image:linear-gradient(90deg,rgba(251,191,36,.4),rgba(148,163,184,.12) 60%,transparent) 1;
+  padding-top:9px;font:400 12px/1.65 var(--font);color:var(--dim)}
+.ov-inner .ovh{font:700 9px var(--mono);letter-spacing:.22em;color:var(--amber);
+  text-transform:uppercase;margin-bottom:5px;text-shadow:0 0 10px rgba(251,191,36,.35)}
+.ov-inner b{color:var(--txt);font-weight:600}
+
+.empty{border:1px dashed rgba(148,163,184,.2);background:rgba(10,14,26,.35);
+  border-radius:13px;padding:20px;text-align:center;font:500 12px var(--mono);color:var(--faint)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="logo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    <span>MENA<span class="a">PULSE</span></span><span class="pill">MOCK</span>
+  </div>
+  <nav id="tabs"></nav>
+  <div class="upd" id="upd"></div>
+</div></header>
+<div class="wrap">
+  <div class="hbar" id="hbar"></div>
+  <div id="subtabs"></div>
+  <div id="content"></div>
+</div>
+<script>
+"use strict";
+const ago = m => new Date(Date.now() - m*6e4).toISOString();
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const seeded = n => ((n*2654435761)>>>0)%1000/1000;
+
+// ── hand-written material rows: [source,market,exchange,headline,minsAgo,tickers,impact,url]
+const ROWS=[
+[
+"EGX",
+"EG",
+"EGX",
+"COMI reports FY net income of EGP 62.4bn, up 41% y/y — beats consensus",
+14,
+[
+"COMI"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"Enterprise",
+"EG",
+null,
+"CBE holds overnight rates steady, signals easing cycle could begin in Q4",
+120,
+[],
+"high",
+"https://enterprise.news/egypt/en/"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"ETEL board approves cash dividend of EGP 4.10/share for FY",
+180,
+[
+"ETEL"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"TMGH board approves capital increase of EGP 8bn via rights issue",
+300,
+[
+"TMGH"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"ABUK Q4 profit climbs 22% on urea price recovery and export mix",
+420,
+[
+"ABUK"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"Al Mal",
+"EG",
+null,
+"SWDY wins USD 690mn transmission contract in Saudi Arabia",
+540,
+[
+"SWDY"
+],
+"high",
+"https://almalnews.com"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"EAST receives approval for price increases across tobacco portfolio",
+1320,
+[
+"EAST"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"Al Mal",
+"EG",
+null,
+"ORAS consortium awarded USD 1.1bn infrastructure package",
+1800,
+[
+"ORAS"
+],
+"high",
+"https://almalnews.com"
+],
+[
+"Arab Finance",
+"EG",
+null,
+"HRHO in advanced talks to acquire regional fintech platform — sources",
+2880,
+[
+"HRHO"
+],
+"high",
+"https://www.arabfinance.com"
+],
+[
+"Mubasher EG",
+"EG",
+null,
+"FWRY Q2 revenue jumps 38% y/y as banking services scale",
+3120,
+[
+"FWRY"
+],
+"high",
+"https://www.mubasher.info"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"PHDC launches EGP 15bn north coast project with 40% presold",
+4620,
+[
+"PHDC"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"Mubasher EG",
+"EG",
+null,
+"EFIH shareholders approve 1-for-2 bonus share distribution",
+8640,
+[
+"EFIH"
+],
+"high",
+"https://www.mubasher.info"
+],
+[
+"Arab Finance",
+"EG",
+null,
+"CIRA completes acquisition of two K-12 school platforms",
+10560,
+[
+"CIRA"
+],
+"high",
+"https://www.arabfinance.com"
+],
+[
+"Enterprise",
+"EG",
+null,
+"FRA issues new disclosure rules for listed companies effective September",
+17280,
+[],
+"high",
+"https://enterprise.news/egypt/en/"
+],
+[
+"Enterprise",
+"EG",
+null,
+"IMF completes program review, unlocking USD 1.2bn tranche",
+21600,
+[],
+"high",
+"https://enterprise.news/egypt/en/"
+],
+[
+"EGX",
+"EG",
+"EGX",
+"EKHO acquires 60% stake in Kuwaiti energy services group",
+28800,
+[
+"EKHO"
+],
+"high",
+"https://www.egx.com.eg/en/newssearch.aspx"
+],
+[
+"Al Mal",
+"EG",
+null,
+"MASR secures East Cairo land plot for EGP 10bn mixed-use scheme",
+37440,
+[
+"MASR"
+],
+"high",
+"https://almalnews.com"
+],
+[
+"Arab Finance",
+"EG",
+null,
+"Moody's revises Egypt banking outlook to positive on FX stability",
+40320,
+[],
+"high",
+"https://www.arabfinance.com"
+],
+[
+"Mubasher EG",
+"EG",
+null,
+"EGX30 closes 0.8% higher as banks lead; turnover at EGP 3.1bn",
+55,
+[],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Arab Finance",
+"EG",
+null,
+"Foreign investors net buyers for third straight session on EGX",
+240,
+[],
+"general",
+"https://www.arabfinance.com"
+],
+[
+"Al Mal",
+"EG",
+null,
+"Trading volumes light ahead of long weekend; mid-caps outperform",
+480,
+[],
+"general",
+"https://almalnews.com"
+],
+[
+"Mubasher EG",
+"EG",
+null,
+"Most active: COMI, SWDY and TMGH dominate value traded",
+600,
+[
+"COMI",
+"SWDY",
+"TMGH"
+],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Arab Finance",
+"EG",
+null,
+"Analyst note: Egyptian banks still screen cheap vs GCC peers",
+1800,
+[],
+"general",
+"https://www.arabfinance.com"
+],
+[
+"Al Mal",
+"EG",
+null,
+"Weekly review: EGX30 adds 2.4% amid strong local appetite",
+4320,
+[],
+"general",
+"https://almalnews.com"
+],
+[
+"Mubasher EG",
+"EG",
+null,
+"Mid-cap momentum continues as real estate names extend rally",
+7200,
+[],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Enterprise",
+"EG",
+null,
+"What we're watching this month: budget season and FX flows",
+28800,
+[],
+"general",
+"https://enterprise.news/egypt/en/"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"Aramco (2222) announces Q2 dividend of SAR 0.35/share; base payout maintained",
+35,
+[
+"2222"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"1120 Al Rajhi Bank H1 net profit rises 18% to SAR 10.9bn — beats estimates",
+180,
+[
+"1120"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"2010 SABIC Q2 loss narrows sharply on spreads; guides margin recovery",
+360,
+[
+"2010"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Zawya",
+"SA",
+null,
+"SAMA follows Fed with 25bp cut to repo rate",
+420,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"1180 SNB board appoints new chief executive effective August",
+720,
+[
+"1180"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"ACWA Power (2082) signs PPA for 2GW solar complex worth SAR 8.3bn",
+1620,
+[
+"2082"
+],
+"high",
+"https://www.mubasher.info"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"2280 Almarai Q2 net income up 14% on poultry and dairy volumes",
+1680,
+[
+"2280"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"4013 Sulaiman Al Habib opens 500-bed flagship hospital in Riyadh",
+3240,
+[
+"4013"
+],
+"high",
+"https://www.mubasher.info"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"Maaden (1211) board recommends SAR 9bn capital increase for expansion",
+5760,
+[
+"1211"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Zawya",
+"SA",
+null,
+"flynas IPO order book covered 100x ahead of pricing",
+7200,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"7010 stc raises dividend policy floor to SAR 0.55/quarter",
+10080,
+[
+"7010"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"2382 ADES wins drilling contracts worth USD 190mn in Gulf waters",
+12960,
+[
+"2382"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Zawya",
+"SA",
+null,
+"CMA approves IPO of leading logistics firm on main market",
+14400,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"SA",
+null,
+"PIF launches national industrial platform targeting SAR 60bn investment",
+20160,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"Tadawul",
+"SA",
+"TASI",
+"1150 Alinma completes SAR 5bn tier-1 sukuk issuance",
+30240,
+[
+"1150"
+],
+"high",
+"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"Maaden (1211) takes FID on phosphate 3 expansion",
+38880,
+[
+"1211"
+],
+"high",
+"https://www.mubasher.info"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"TASI ends flat near 12,400 as petchems offset banking gains",
+80,
+[],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Zawya",
+"SA",
+null,
+"Petchem sector note: spreads bottoming but valuations full",
+300,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"Top gainers and losers: insurance names swing on results season",
+540,
+[],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Zawya",
+"SA",
+null,
+"Saudi market value traded holds above SAR 6bn for fifth session",
+720,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"Most active by volume: 7010 stc leads Tadawul turnover",
+1560,
+[
+"7010"
+],
+"general",
+"https://www.mubasher.info"
+],
+[
+"Zawya",
+"SA",
+null,
+"Weekly technicals: TASI tests resistance at 12,550",
+5760,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"SA",
+null,
+"Saudi market monthly wrap: value traded up 12% m/m",
+11520,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Mubasher SA",
+"SA",
+null,
+"Foreign ownership in Saudi stocks hits new record — monthly data",
+23040,
+[],
+"general",
+"https://www.mubasher.info"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"FAB Q2 net profit climbs 12% to AED 4.9bn on fee income strength",
+22,
+[
+"FAB"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ALDAR acquires prime Saadiyat land bank for AED 3.2bn development",
+360,
+[
+"ALDAR"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"PUREHEALTH completes acquisition of UK hospital group for GBP 1.1bn",
+540,
+[
+"PUREHEALTH"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ADNOCGAS signs USD 2.2bn LNG supply agreement with Asian buyer",
+1680,
+[
+"ADNOCGAS"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"IHC unit completes strategic stake purchase in regional AI infrastructure firm",
+3000,
+[
+"IHC"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ADCB prices USD 750mn green bond at tightest spread since 2021",
+4320,
+[
+"ADCB"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ADPORTS wins 25-year container terminal concession in Karachi",
+11520,
+[
+"ADPORTS"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"EAND raises stake in Vodafone to 18%, seeks board seat",
+17280,
+[
+"EAND"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"MULTIPLY board approves AED 1bn share buyback program",
+25920,
+[
+"MULTIPLY"
+],
+"high",
+"https://www.adx.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"EMAAR board approves special dividend of AED 0.25/share for H1",
+65,
+[
+"EMAAR"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"TALABAT Q2 GMV grows 25% y/y; raises full-year guidance",
+480,
+[
+"TALABAT"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"DIB prices USD 1bn sustainable sukuk at 4.85%, 5.6x oversubscribed",
+660,
+[
+"DIB"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"EMIRATESNBD H1 profit reaches AED 14.2bn on record retail lending",
+1800,
+[
+"EMIRATESNBD"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"SALIK announces CEO transition; CFO appointed interim chief",
+7200,
+[
+"SALIK"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"AIRARABIA confirms 20-aircraft order to anchor new Riyadh hub",
+8640,
+[
+"AIRARABIA"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"DEWA declares H1 dividend of AED 3.1bn, in line with policy",
+21600,
+[
+"DEWA"
+],
+"high",
+"https://marketwatch.dfm.ae"
+],
+[
+"Zawya",
+"AE",
+null,
+"CBUAE mirrors Fed decision, cuts base rate 25bp",
+240,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"AE",
+null,
+"SCA unveils new listing framework to attract family businesses",
+14400,
+[],
+"high",
+"https://www.zawya.com"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ADX general index slips 0.3%; EAND heaviest drag on turnover",
+95,
+[
+"EAND"
+],
+"general",
+"https://www.adx.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"DFM daily bulletin: 28,400 trades, value at AED 612mn",
+140,
+[],
+"general",
+"https://marketwatch.dfm.ae"
+],
+[
+"ADX",
+"AE",
+"ADX",
+"ADX volumes concentrate in banks ahead of results week",
+420,
+[],
+"general",
+"https://www.adx.ae"
+],
+[
+"DFM",
+"AE",
+"DFM",
+"Most active on DFM: EMAAR and DIB lead value traded",
+720,
+[
+"EMAAR",
+"DIB"
+],
+"general",
+"https://marketwatch.dfm.ae"
+],
+[
+"Zawya",
+"AE",
+null,
+"Dubai property market note: off-plan sales cool from record pace",
+4320,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"AE",
+null,
+"UAE markets weekly: ADX and DFM diverge as earnings season peaks",
+8640,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"AE",
+null,
+"Monthly liquidity report: UAE ADVs up 9% m/m",
+24480,
+[],
+"general",
+"https://www.zawya.com"
+],
+[
+"Zawya",
+"AE",
+null,
+"Gulf funds monthly positioning survey shows overweight UAE equities",
+31680,
+[],
+"general",
+"https://www.zawya.com"
+]
+];
+
+// ── procedural generators: maximum density across all three windows ────────
+const CUR = {EG:"EGP", SA:"SAR", AE:"AED"};
+const POOLS = {
+  EG:{tks:["COMI","HRHO","TMGH","SWDY","EFIH","EAST","ABUK","ETEL","EKHO","FWRY","ORAS","PHDC","MASR","CIRA"],src:"EGX",exch:"EGX",url:"https://www.egx.com.eg/en/newssearch.aspx",agg:["Mubasher EG","Al Mal","Arab Finance","Enterprise"],idx:"EGX30"},
+  SA:{tks:["2222","1120","1180","7010","2010","1211","4013","2082","2280","2382","1150"],src:"Tadawul",exch:"TASI",url:"https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en",agg:["Mubasher SA","Zawya"],idx:"TASI"},
+  AE:{adx:["FAB","EAND","IHC","ALDAR","ADCB","PUREHEALTH","ADNOCGAS","ADPORTS","MULTIPLY"],dfm:["EMAAR","DIB","EMIRATESNBD","SALIK","DEWA","TALABAT","AIRARABIA"],agg:["Zawya"],idx:"FADGI"},
+};
+const HI_TPL = [
+  (tk,c,r,d)=>`${tk} Q2 net profit ${r>0.5?"rises":"falls"} ${5+Math.floor(r*30)}% y/y, ${r>0.4?"beating":"missing"} consensus estimates`,
+  (tk,c,r,d)=>`${tk} board proposes cash dividend of ${c} ${(0.2+r*3).toFixed(2)}/share`,
+  (tk,c,r,d)=>`${tk} secures ${c} ${1+Math.floor(r*8)}bn financing facility to fund expansion plans`,
+  (tk,c,r,d)=>`${tk} announces buyback program of up to ${2+Math.floor(r*8)}% of shares outstanding`,
+  (tk,c,r,d)=>`${tk} wins ${["infrastructure","energy","logistics","digital services"][d%4]} contract worth ${c} ${(0.5+r*4).toFixed(1)}bn`,
+  (tk,c,r,d)=>`${tk} completes acquisition of ${20+Math.floor(r*60)}% stake in sector peer`,
+  (tk,c,r,d)=>`${tk} receives regulatory approval for ${["capital increase","new product line","cross-listing","subsidiary spin-off"][d%4]}`,
+];
+function genHigh(){
+  const out=[];
+  for(let d=0; d<30; d++) for(let k=0; k<2; k++){
+    const r=seeded(d*17+k*7+3);
+    const mins=d*1440 + 180 + k*330 + Math.floor(seeded(d*3+k)*200);
+    for(const mkt of ["EG","SA","AE"]){
+      const rr=seeded(d*13+k*11+{EG:0,SA:41,AE:83}[mkt]);
+      let tk,src,exch,url;
+      if(mkt==="AE"){
+        const useAdx=(d+k)%2===0;
+        const pool=useAdx?POOLS.AE.adx:POOLS.AE.dfm;
+        tk=pool[(d*3+k*5)%pool.length];
+        src=useAdx?"ADX":"DFM"; exch=src;
+        url=useAdx?"https://www.adx.ae":"https://marketwatch.dfm.ae";
+      } else {
+        const p=POOLS[mkt]; tk=p.tks[(d*3+k*5)%p.tks.length]; src=p.src; exch=p.exch; url=p.url;
+      }
+      out.push({id:`gh-${mkt}-${d}-${k}`,source:src,market:mkt,exchange:exch,
+        headline:HI_TPL[(d+k*3+{EG:0,SA:2,AE:4}[mkt])%HI_TPL.length](tk,CUR[mkt],rr,d),
+        published_at:ago(mins+{EG:0,SA:20,AE:40}[mkt]),tickers:[tk],impact:"high",url});
+    }
+  }
+  return out;
+}
+const GEN_TPL = {
+  EG:[
+    (r,d)=>`EGX pre-open: order books point ${r>0.5?"firmer":"softer"}; ${3+Math.floor(r*6)} names on watch after overnight disclosures`,
+    (r,d)=>`Midday most active: turnover concentrated in banking and real estate names`,
+    (r,d)=>`EGX session recap: EGX30 closes ${(r*2.4-1.2).toFixed(1)}% ${r>0.5?"higher":"lower"} at ${(33500+Math.floor(seeded(d+51)*900)).toLocaleString()}; turnover EGP ${(2+r*2.5).toFixed(1)}bn`,
+    (r,d)=>`Flows watch: ${r>0.5?"foreign":"local institutional"} investors net ${r>0.4?"buyers":"sellers"} for the session`,
+  ],
+  SA:[
+    (r,d)=>`Tadawul pre-open: ${r>0.5?"petchems":"banks"} in focus as ${r>0.4?"oil holds gains":"results season continues"}`,
+    (r,d)=>`Midday: value traded tracking SAR ${(4+r*4).toFixed(1)}bn; breadth ${r>0.5?"positive":"negative"}`,
+    (r,d)=>`Tadawul recap: TASI ends ${(r*2.4-1.2).toFixed(1)}% ${r>0.5?"higher":"lower"} at ${(12100+Math.floor(seeded(d+71)*700)).toLocaleString()}; value traded SAR ${(5+r*3).toFixed(1)}bn`,
+    (r,d)=>`QFI monthly flows: foreign investors net ${r>0.5?"buy":"sell"} SAR ${(0.4+r*2).toFixed(1)}bn`,
+  ],
+  AE:[
+    (r,d)=>`UAE pre-open: GCC peers ${r>0.5?"firm":"mixed"}; watch banks ahead of ${r>0.4?"results":"dividend dates"}`,
+    (r,d)=>`ADX midday: FADGI ${r>0.5?"up":"down"} ${(r*0.9).toFixed(1)}%; value AED ${(0.8+r*1.2).toFixed(1)}bn`,
+    (r,d)=>`DFM close: DFMGI ${r>0.5?"higher":"lower"} ${(r*1.1).toFixed(1)}%; ${(22000+Math.floor(seeded(d+91)*9000)).toLocaleString()} trades, value AED ${400+Math.floor(r*350)}mn`,
+    (r,d)=>`Gulf funds note: UAE positioning ${r>0.5?"extends overweight":"trimmed"} per weekly survey`,
+  ],
+};
+function genGeneral(){
+  const out=[];
+  const srcFor = (mkt,j)=> mkt==="AE" ? (j===1?["ADX","ADX","https://www.adx.ae"] : j===2?["DFM","DFM","https://marketwatch.dfm.ae"] : ["Zawya",null,"https://www.zawya.com"])
+    : [POOLS[mkt].agg[j%POOLS[mkt].agg.length], null, mkt==="EG"?"https://www.mubasher.info":"https://www.zawya.com"];
+  for(let d=0; d<30; d++) for(let j=0; j<4; j++){
+    const mins=d*1440 + [70,240,430,560][j] + Math.floor(seeded(d*5+j)*60);
+    for(const mkt of ["EG","SA","AE"]){
+      const r=seeded(d*29+j*13+{EG:1,SA:47,AE:89}[mkt]);
+      const [source,exchange,url]=srcFor(mkt,j);
+      out.push({id:`gg-${mkt}-${d}-${j}`,source,market:mkt,exchange,
+        headline:GEN_TPL[mkt][j](r,d),published_at:ago(mins+{EG:0,SA:15,AE:30}[mkt]),
+        tickers:[],impact:"general",url});
+    }
+  }
+  return out;
+}
+const NEWS = [
+  ...ROWS.map(([source,market,exchange,headline,mins,tickers,impact,url],i)=>
+    ({id:"h-"+i,source,market,exchange,headline,published_at:ago(mins),tickers,impact,url})),
+  ...genHigh(), ...genGeneral(),
+];
+
+// ── live minute updates: inject a fresh breaking item + re-render times ────
+const BRK = [
+  ["EG","EGX","EGX",(r)=>`COMI trading update: management flags ${r>0.5?"stronger":"steady"} fee income into Q3`,["COMI"],"high","https://www.egx.com.eg/en/newssearch.aspx"],
+  ["SA","Tadawul","TASI",(r)=>`2222 Aramco confirms scheduled maintenance at ${r>0.5?"two":"one"} gas processing trains — no output impact`,["2222"],"high","https://www.saudiexchange.sa/wps/portal/saudiexchange/newsandreports/issuer-news?locale=en"],
+  ["AE","DFM","DFM",(r)=>`EMAAR reports ${(2+r*3).toFixed(1)}k unit presales in new launch within 24 hours`,["EMAAR"],"high","https://marketwatch.dfm.ae"],
+  ["EG","Mubasher EG",null,(r)=>`EGX intraday: EGX30 ${r>0.5?"extends gains":"pares losses"}, now ${r>0.5?"+":"-"}${(r*0.9).toFixed(1)}%`,[],"general","https://www.mubasher.info"],
+  ["AE","ADX","ADX",(r)=>`FAB block trade crosses at market: AED ${(120+r*300)|0}mn`,["FAB"],"high","https://www.adx.ae"],
+  ["SA","Mubasher SA",null,(r)=>`Tadawul intraday: TASI ${r>0.5?"firms":"slips"} as ${r>0.4?"banks":"petchems"} rotate`,[],"general","https://www.mubasher.info"],
+];
+let brkN = 0, lastUpdated = new Date();
+function injectBreaking(){
+  const [market,source,exchange,fn,tickers,impact,url]=BRK[brkN%BRK.length];
+  const r=seeded(brkN*31+7);
+  NEWS.unshift({id:"brk-"+brkN, source, market, exchange, headline:fn(r),
+    published_at:new Date().toISOString(), tickers, impact, url});
+  brkN++;
+}
+
+// ── overview engine (mirrors backend ranker categories) ────────────────────
+function overviewFor(n){
+  const h=n.headline, tk=n.tickers[0]||"the company";
+  const t=re=>re.test(h);
+  let b;
+  if(t(/dividend/i)) b=`${tk} has announced a cash distribution to shareholders. Key checks: implied yield at the current price, payout sustainability versus earnings and free cash flow, and any signal of a policy change. Watch the follow-up disclosure for ex-date and record date.`;
+  else if(t(/profit|net income|revenue|results|GMV|loss|consensus/i)) b=`Earnings event for ${tk}. Focus on the quality of the print — margins, one-offs, FX effects — and whether guidance or consensus estimates need to move. Expect sell-side estimate revisions within 24–48 hours and follow-through in the next trading session.`;
+  else if(t(/acqui|stake|merger|takeover|spin-off/i)) b=`Corporate action: ${tk} is changing its asset or ownership perimeter. Assess deal multiple versus trading multiple, funding mix (cash/debt/equity), and integration or approval risk. Regulatory sign-off and financing terms are the near-term catalysts.`;
+  else if(t(/rate|CBE|SAMA|CBUAE|Fed|repo|monetary/i)) b=`Macro/monetary event with direct read-through to bank margins, real-estate demand, and equity risk premia across the market. Rate-sensitive names (banks, developers, leveraged corporates) will reprice first. Watch forward guidance language for the pace of the cycle.`;
+  else if(t(/capital increase|rights issue|bonus|buyback|sukuk|bond|IPO|issuance|financing|facility/i)) b=`Capital-structure event for ${tk}. Evaluate dilution or accretion mechanics, use of proceeds, and pricing versus comparable issues. For income investors, check the impact on per-share metrics and future distribution capacity.`;
+  else if(t(/contract|award|PPA|concession|order|agreement|supply/i)) b=`Backlog event: ${tk} has added contracted revenue visibility. Key questions are margin profile versus the existing book, execution timeline, and counterparty quality. Translate the award into revenue phasing before adjusting estimates.`;
+  else if(t(/CEO|board|chairman|appoint|transition|executive/i)) b=`Governance event at ${tk}. Leadership changes can signal strategy shifts — check for continuity of capital-allocation policy and any linked disclosures. Historically these are volatility events until the incoming mandate is clarified.`;
+  else if(t(/FRA|CMA|SCA|regulat|rules|framework|approval|listing/i)) b=`Regulatory development. Map which listed names fall inside the new scope, the compliance timeline, and whether it changes the cost of capital or the listed-universe pipeline. Regulators' implementation notes usually follow within weeks.`;
+  else if(t(/Moody|rating|outlook/i)) b=`Ratings action with implications for funding costs and foreign-investor eligibility thresholds. Cross-check which issuers benefit most and whether spreads have already moved. Sovereign-linked upgrades typically lift bank valuations first.`;
+  else b=`Routine market-flow item — session color rather than a materiality event. Useful for gauging liquidity, breadth, and positioning, but unlikely to move single-name estimates. No model impact expected.`;
+  return b+` <b>Source:</b> ${esc(n.source)} · published ${timeAgo(n.published_at)}.`;
+}
+
+
+// ── state + render ─────────────────────────────────────────────────────────
+const state = {market:"EG", win:"daily", uaeSub:"ALL"};
+const expanded = new Set();
+const WIN_H = {daily:24, weekly:168, monthly:720};
+const MARKETS=[["EG","Egypt"],["SA","Saudi Arabia (Tadawul)"],["AE","United Arab Emirates"]];
+const WINS=[["daily","Daily","Last 24 hours"],["weekly","Weekly","Last 7 days"],["monthly","Monthly","Last 30 days"]];
+const SUBS=[["ALL","All UAE"],["ADX","ADX Only"],["DFM","DFM Only"]];
+
+function timeAgo(iso){
+  const s=(Date.now()-new Date(iso))/1e3;
+  if(s<60)return"just now"; if(s<3600)return Math.floor(s/60)+"m ago";
+  if(s<86400)return Math.floor(s/3600)+"h ago"; return Math.floor(s/86400)+"d ago";
+}
+function boldTickers(h,ticks){
+  let out=esc(h);
+  ticks.forEach(t=>{ out=out.replace(new RegExp("\\b"+t+"\\b","g"),"<b>"+t+"</b>"); });
+  return out;
+}
+// Bullish / bearish read on the headline drives the neon accent edge.
+function sentiment(h){
+  if(/rise|rises|jump|climb|beat|beating|higher|up \d|gains?|surge|record|grow|extends/i.test(h)) return "s-bull";
+  if(/fall|falls|miss|missing|lower|down \d|drop|decline|loss|slips?|warning|downgrade/i.test(h)) return "s-bear";
+  return "";
+}
+function dirGlyph(cls){
+  return cls==="s-bull" ? '<span class="dir up">▲</span>'
+       : cls==="s-bear" ? '<span class="dir dn">▼</span>' : "";
+}
+// Toggle in place — no re-render — so the slide animation always plays.
+function toggleOv(id){
+  const wrap=document.getElementById("ov-"+id), btn=document.getElementById("ovb-"+id);
+  if(!wrap) return;
+  const open=!expanded.has(id);
+  open ? expanded.add(id) : expanded.delete(id);
+  wrap.classList.toggle("open", open);
+  btn.classList.toggle("ov-on", open);
+  btn.innerHTML=ovBtnLabel(open);
+}
+function ovBtnLabel(open){
+  return `${open?"Hide":"Overview"} <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${open?'<path d="m18 15-6-6-6 6"/>':'<path d="m6 9 6 6 6-6"/>'}</svg>`;
+}
+function card(n){
+  const tagCls={"EGX":"t-EGX","Tadawul":"t-Tadawul","ADX":"t-ADX","DFM":"t-DFM"}[n.source]||"t-x";
+  const isNew=Date.now()-new Date(n.published_at)<2*60e3;
+  const open=expanded.has(n.id);
+  const sent=n.impact==="high"?sentiment(n.headline):"";
+  return `<article class="card ${n.impact==="high"?"hi-card":""} ${sent}">
+    <div style="min-width:0;flex:1">
+      <div class="meta">
+        ${isNew?'<span class="ndot" title="new"></span>':""}
+        <span class="src ${tagCls}">${esc(n.source)}</span>
+        ${dirGlyph(sent)}
+        <span class="when">${timeAgo(n.published_at)}</span>
+        ${n.tickers.map(t=>`<span class="tick">${esc(t)}</span>`).join("")}
+      </div>
+      <h3>${boldTickers(n.headline,n.tickers)}</h3>
+      <div class="ovwrap ${open?"open":""}" id="ov-${n.id}">
+        <div class="ov"><div class="ov-inner"><div class="ovh">Analyst overview</div>${overviewFor(n)}</div></div>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="abtn ${open?"ov-on":""}" id="ovb-${n.id}" onclick="toggleOv('${n.id}')">${ovBtnLabel(open)}</button>
+      <a class="abtn" href="${esc(n.url)}" target="_blank" rel="noopener">Read Source
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
+    </div>
+  </article>`;
+}
+function section(title, items, hi){
+  const icon = hi
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V6"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8V6Z"/></svg>';
+  return `<section class="sec ${hi?"hi":"gen"}">
+    <div class="sec-h">${icon}<h2>${title}</h2><span class="n">${items.length}</span><div class="rule"></div></div>
+    ${items.length ? items.map(card).join("") : '<p class="empty">Nothing in this window.</p>'}
+  </section>`;
+}
+function baseItems(){
+  let items = NEWS.filter(n=>n.market===state.market);
+  if(state.market==="AE" && state.uaeSub!=="ALL") items = items.filter(n=>n.exchange===state.uaeSub);
+  return items;
+}
+function render(){
+  document.getElementById("tabs").innerHTML = MARKETS.map(([id,l])=>
+    `<button class="${state.market===id?"on":""}" onclick="state.market='${id}';state.uaeSub='ALL';render()">${l}</button>`).join("");
+  const base = baseItems();
+  const inWin = w => base.filter(n=>(Date.now()-new Date(n.published_at))<=WIN_H[w]*36e5);
+  document.getElementById("hbar").innerHTML = WINS.map(([id,l1,l2])=>
+    `<button class="hbtn ${state.win===id?"on":""}" onclick="state.win='${id}';render()">
+       <div class="l1">${l1}</div><div class="l2">${l2} · ${inWin(id).length} items</div></button>`).join("");
+  document.getElementById("upd").innerHTML =
+    `<span class="dot"></span> LIVE · updated ${lastUpdated.toLocaleTimeString()} · refreshes every 60s`;
+  document.getElementById("subtabs").innerHTML = state.market==="AE"
+    ? `<div class="subtabs">${SUBS.map(([id,l])=>
+        `<button class="${state.uaeSub===id?"on":""}" onclick="state.uaeSub='${id}';render()">${l}</button>`).join("")}</div>` : "";
+  const items = inWin(state.win).sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
+  document.getElementById("content").innerHTML =
+    section("High-Impact Material Disclosures", items.filter(n=>n.impact==="high"), true) +
+    section("General Market Stream", items.filter(n=>n.impact==="general"), false);
+}
+render();
+setInterval(()=>{ injectBreaking(); lastUpdated=new Date(); render(); }, 60_000);
+</script>
+</body>
+</html>
