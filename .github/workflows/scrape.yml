@@ -1,0 +1,40 @@
+name: Scrape MENA news
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 min (GitHub may queue; effective ~15-25 min)
+  workflow_dispatch: {}       # manual "Run workflow" button
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r backend/requirements.txt
+      - run: playwright install --with-deps chromium
+      - name: Restore news DB from previous run (keeps 30-day history)
+        uses: actions/cache@v4
+        with:
+          path: backend/app/menapulse.db
+          key: newsdb-${{ github.run_id }}
+          restore-keys: newsdb-
+      - name: Scrape and export
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}  # optional AI ranking
+          PROXY_URL: ${{ secrets.PROXY_URL }}                  # optional, for hard-blocked sites
+        run: |
+          mkdir -p frontend/public
+          python backend/scripts/export_json.py frontend/public/news.json
+      - name: Commit refreshed feed
+        run: |
+          git config user.name "menapulse-bot"
+          git config user.email "actions@github.com"
+          git add frontend/public/news.json
+          git diff --cached --quiet || git commit -m
