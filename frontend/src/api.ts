@@ -15,7 +15,7 @@ export async function fetchNews(): Promise<{ items: NewsItem[]; live: boolean }>
     return { items: [...data.high_impact, ...data.general], live: true };
   } catch { /* fall through */ }
   try {
-    const res = await fetch("/news.json", { signal: AbortSignal.timeout(4000), cache: "no-store" });
+    const res = await fetch("./news.json", { signal: AbortSignal.timeout(4000), cache: "no-store" });
     if (!res.ok) throw new Error(String(res.status));
     const data = await res.json();
     if (Array.isArray(data.items) && data.items.length) return { items: data.items, live: true };
