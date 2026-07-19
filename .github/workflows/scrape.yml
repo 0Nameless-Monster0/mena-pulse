@@ -32,9 +32,10 @@ jobs:
         run: |
           mkdir -p frontend/public
           python backend/scripts/export_json.py frontend/public/news.json
-      - name: Commit refreshed feed
+          - name: Commit refreshed feed
         run: |
           git config user.name "menapulse-bot"
           git config user.email "actions@github.com"
           git add frontend/public/news.json
-          git diff --cached --quiet || git commit -m
+          git diff --cached --quiet || git commit -m "update feed"
+          git push
