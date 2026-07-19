@@ -17,16 +17,23 @@ class RSSScraper(BaseScraper):
     async def scrape(self) -> list[NewsItem]:
         body = await self.fetch(self.cfg["url"])
         feed = feedparser.parse(body)
+        is_gnews = "news.google" in self.cfg["url"]
         out = []
         for e in feed.entries[:40]:
             when = datetime.now(timezone.utc)
             if getattr(e, "published_parsed", None):
                 when = datetime.fromtimestamp(mktime(e.published_parsed), tz=timezone.utc)
+            title = e.get("title", "").strip()
+            snippet = (e.get("summary", "") or "")[:280]
+            if is_gnews and " - " in title:
+                # Google News appends " - Publisher"; move it into the snippet.
+                title, publisher = title.rsplit(" - ", 1)
+                snippet = f"via {publisher}"
             out.append(NewsItem(
                 source_key=self.key, source=self.name, market=self.market,
                 exchange=self.exchange,
-                headline=e.get("title", "").strip(),
-                snippet=(e.get("summary", "") or "")[:280],
+                headline=title,
+                snippet=snippet,
                 url=e.get("link", self.cfg["url"]),
                 published_at=when,
             ))
